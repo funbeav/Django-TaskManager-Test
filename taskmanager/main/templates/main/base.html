@@ -17,9 +17,9 @@
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary {{ link_style_index }}">Главная</a></li>
-              <li><a href="{% url 'about' %}" class="nav-link px-2 text-secondary {{ link_style_about }}">Про нас</a></li>
-              <li><a href="{% url 'create' %}" class="nav-link px-2 text-secondary {{ link_style_create }}">Создать таск</a></li>
+              <li><a href="{% url 'task:home' %}" class="nav-link px-2 text-secondary {{ link_style_index }}">Главная</a></li>
+              <li><a href="{% url 'task:about' %}" class="nav-link px-2 text-secondary {{ link_style_about }}">Про нас</a></li>
+              <li><a href="{% url 'task:create' %}" class="nav-link px-2 text-secondary {{ link_style_create }}">Создать таск</a></li>
             </ul>
 
             <div class="text-end">

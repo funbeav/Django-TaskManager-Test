@@ -4,15 +4,23 @@
 {{ title }}
 {% endblock %}
 
+{% block action %}
+{% if "/edit/" in request.path %}
+    "{% url 'task:edit' task.id %}"
+{% else %}
+    "{% url 'task:create' %}"
+{% endif %}
+{% endblock %}
+
 {% block content %}
     <br><h1>{{ title }}</h1><br>
-    <form method="post">
+    <form method="post" action="{{action}}" >
         {% csrf_token %}
         {{ form.title }} <br>
         {{ form.task }} <br>
         <button type="submit" class="btn btn-warning" >Сохранить</button>
-        {% if edit %}
-            <a class="btn btn-danger" href="{% url 'edit' %}?id={{ task_id }}&mode='del'">Удалить</a>
+        {% if "/edit/" in request.path %}
+            <a class="btn btn-danger" href="{% url 'task:delete' task.id %}">Удалить</a>
         {% endif %}
         {{ error }}
     </form>

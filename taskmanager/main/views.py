@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.http import HttpResponseRedirect
 from .models import Task
 from .forms import TaskForm
 
@@ -27,7 +28,7 @@ def create(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('task:home')
         else:
             error = 'Форма неверна'
 
@@ -41,29 +42,31 @@ def create(request):
     return render(request, 'main/create.html', attrs)
 
 
-def edit(request):
-    task_id = request.GET.get('id')
-    task = Task.objects.get(pk=task_id)
+def edit(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
     error = ''
-    if request.method == 'POST':
+    if request.method == "POST":
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('task:home')
         else:
             error = 'Форма неверна'
-    else:
-        mode = request.GET.get('mode')
-        if mode == "'del'":
-            task.delete()
-            return redirect('home')
 
     form = TaskForm(instance=task)
-    attrs = {
+    context = {
         'title': 'Редактирование задачи',
         'form': form,
         'error': error,
-        'edit': True,
-        'task_id': task_id
+        'task': task
     }
-    return render(request, 'main/create.html', attrs)
+    return render(request, 'main/create.html', context)
+
+
+def delete(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task:home')
+    else:
+        return render(request, 'main/delete.html', {'task': task})
